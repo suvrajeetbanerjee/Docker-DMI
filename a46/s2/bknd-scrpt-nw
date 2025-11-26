@@ -1,0 +1,91 @@
+#!/usr/bin/bash
+
+# writer + requirements + Dockerfile script → BACKEND
+# Writes to /data/message.txt every time /write is hit.
+
+# app.py
+cat > backend/app.py << 'EOF'
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
+@app.route("/write")
+def write_message():
+    os.makedirs("/data", exist_ok=True)
+    with open("/data/message.txt", "w") as f:
+        f.write("Hello from the backend container! Updated Content")
+    return "Message written successfully!"
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF
+
+# requirements.txt
+echo "flask" > backend/requirements.txt
+
+# Dockerfile
+cat > backend/Dockerfile << 'EOF'
+FROM python:3.10-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
+CMD ["python", "app.py"]
+EOF
+
+
+# reader + requirements.txt + Dockerfile → FRONTEND
+# Reads /data/message.txt, returns it, or says “no data”.
+
+# Frontend app.py
+cat > frontend/app.py << 'EOF'
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
+@app.route("/")
+def read_message():
+    file_path = "/data/message.txt"
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            return f"Message: {f.read()}"
+    else:
+        return "No data found in volume."
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+EOF
+
+# F-req.
+echo "flask" > frontend/requirements.txt
+
+# F-Dockerfile
+cat > frontend/Dockerfile << 'EOF'
+FROM python:3.10-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
+CMD ["python", "app.py"]
+EOF
+
+
+docker build -t backend-app ./backend
+# docker build -t frontend-app ./frontend
+
+
+docker images
+
+
+docker run -d    --name backend    --network app-net    -p 5001:5000    -v shared-data:/data   backend-app
+
+docker ps
+
+
+# docker run -d    --name backend   --network app-net    -p 5001:5000    -v shared-data:/data    backend-app
+
+# docker run -d    --name frontend    --network app-net    -p 5002:5000    -v shared-data:/data    frontend-app
+
+
+# docker ps
+
