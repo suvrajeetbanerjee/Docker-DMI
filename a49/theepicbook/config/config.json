@@ -1,0 +1,17 @@
+{
+  "development": {
+    "username": "epicuser",
+    "password": "epicpass",
+    "database": "bookstore",
+    "host": "database",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "epicuser",
+    "password": "epicpass",
+    "database": "bookstore",
+    "host": "database",
+    "dialect": "mysql"
+  }
+}
+

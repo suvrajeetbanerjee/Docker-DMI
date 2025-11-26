@@ -1,0 +1,10 @@
+{
+  "production": {
+    "username": "epicuser",
+    "password": "epicpass",
+    "database": "epicbook",
+    "host": "database",
+    "dialect": "mysql"
+  }
+}
+
