@@ -1,0 +1,28 @@
+echo "Docker Version"
+# confirm Docker Installed
+
+docker --version
+
+echo "List Available Docker Networks"
+sudo docker network ls
+
+# Inspect already available docker networks
+
+echo "bridge network info"
+sudo docker network inspect bridge
+
+echo "host network info"
+sudo docker network inspect host
+
+echo "none network info"
+sudo docker network inspect none
+
+echo "Start an HTTP container on the default bridge"
+sudo docker run -d --name backend-default nginx
+
+echo "Confirm it is running"
+sudo docker ps
+
+echo "Start a second throwaway container on the default bridge"
+sudo docker run -it --rm --name tester-default alpine sh
+
