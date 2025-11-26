@@ -1,0 +1,37 @@
+# Node / npm stuff
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs
+*.log
+
+# Git & editor junk
+.git
+.gitignore
+.vscode
+.idea
+*.swp
+
+# Tests / local artifacts
+coverage
+dist
+tmp
+*.tmp
+
+# Docker & CI artifacts
+Dockerfile
+Dockerfile.*
+docker-compose*.yml
+.travis.yml
+
+# Docs & screenshots (don’t need inside images)
+docs
+screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+
